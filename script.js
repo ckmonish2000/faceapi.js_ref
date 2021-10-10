@@ -1,5 +1,5 @@
 const video = document.querySelector('.video');
-const canvas = document.getElementsByClassName('canvas');
+const canvas = document.querySelector('.canvas');
 
 video.style.background = "green"
 
@@ -19,11 +19,19 @@ function startVideo() {
 }
 
 video.addEventListener('play', () => {
+  const canv = faceapi.createCanvasFromMedia(video)
+
+  document.body.append(canv)
+
   setInterval(async () => {
     const detections = await faceapi.detectAllFaces(video,
       new faceapi.TinyFaceDetectorOptions())
       .withFaceLandmarks()
       .withFaceExpressions()
+    // canv.getContext('2d').clearRect(0, 0)
+    faceapi.draw.drawDetections(canv, detections)
+
+
     console.log(detections)
   }, 1000)
 })
