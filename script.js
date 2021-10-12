@@ -37,6 +37,8 @@ video.addEventListener('play', () => {
 
     faceDescriptions = faceapi.resizeResults(faceDescriptions, video)
 
+    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)// clear canvas slate before drawing
+
     faceapi.draw.drawDetections(canvas, faceDescriptions) //to draw box around detection
     faceapi.draw.drawFaceLandmarks(canvas, faceDescriptions) //to draw face landmarks
     faceapi.draw.drawFaceExpressions(canvas, faceDescriptions) //to mention face expression
