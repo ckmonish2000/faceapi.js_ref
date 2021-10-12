@@ -4,20 +4,25 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script defer src="face-api.js/dist/face-api.min.js"></script>
-  <script defer src="script.js"></script>
-  <title>Document</title>
+  <title>Face api</title>
   <style>
-    .canvas {
+    .videos{
+      border: 1px solid;
+      position: absolute;
+      width: 600px;
+      height: 600px;
+    }
+    .canvas{
+      border: 1px solid;
+      width: 600px;
+      height: 600px;
       position: absolute;
     }
   </style>
+  <script defer src="./script.js"></script>
 </head>
 <body>
-  <video class="video" style="opacity: 0;
-  background: green;
-  position: absolute;
-  z-index: 0;" width="720" height="720" autoplay muted></video>
-  <!-- <div class="video"></div> -->
+  <video class="videos" autoplay></video>
+  <!-- <canvas class="canvas"></canvas> -->
 </body>
 </html>
