@@ -24,12 +24,23 @@ navigator.getUserMedia(
 
 
 video.addEventListener('play', () => {
+  const video = document.querySelector('.videos');
+  const canvas = document.querySelector('.canvas');
+  faceapi.matchDimensions(canvas, video) // canvas & video of same size
+
   setInterval(async () => {
-    const video = document.querySelector('.videos');
     let faceDescriptions = await faceapi.detectAllFaces(video)
       .withFaceLandmarks()
       .withFaceDescriptors()
       .withFaceExpressions()
-    console.log(faceDescriptions)
-  }, 100)
+
+
+    faceDescriptions = faceapi.resizeResults(faceDescriptions, video)
+
+    faceapi.draw.drawDetections(canvas, faceDescriptions) //to draw box around detection
+    faceapi.draw.drawFaceLandmarks(canvas, faceDescriptions) //to draw face landmarks
+    faceapi.draw.drawFaceExpressions(canvas, faceDescriptions) //to mention face expression
+
+    // console.log(faceDescriptions)
+  }, 500)
 })
