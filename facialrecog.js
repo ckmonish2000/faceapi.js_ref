@@ -39,10 +39,36 @@ video.addEventListener('play', () => {
 
     canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)// clear canvas slate before drawing
 
-    faceapi.draw.drawDetections(canvas, faceDescriptions) //to draw box around detection
-    faceapi.draw.drawFaceLandmarks(canvas, faceDescriptions) //to draw face landmarks
-    faceapi.draw.drawFaceExpressions(canvas, faceDescriptions) //to mention face expression
+    // faceapi.draw.drawDetections(canvas, faceDescriptions) //to draw box around detection
+    // faceapi.draw.drawFaceLandmarks(canvas, faceDescriptions) //to draw face landmarks
+    // faceapi.draw.drawFaceExpressions(canvas, faceDescriptions) //to mention face expression
 
-    // console.log(faceDescriptions)
+    // detection part 
+
+    const Images = ['monish']
+
+    const LabeledFaceDescriptors = await Promise.all(Images?.map(async label => {
+      const imgUrl = `img/${label}.jpg`
+      const img = await faceapi.fetchImage(imgUrl)
+
+      const faceDescription = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor()
+
+
+      const faceDescriptors = [faceDescription?.descriptor]
+
+      return new faceapi.LabeledFaceDescriptors(label, faceDescriptors)
+    }))
+
+    const faceMatcher = new faceapi.FaceMatcher(LabeledFaceDescriptors, 0.9)
+
+    const results = faceDescriptions.map(fd => faceMatcher.findBestMatch(fd.descriptor))
+
+    results.forEach((bestMatch, i) => {
+      const box = faceDescriptions[i].detection.box
+      const text = bestMatch.toString()
+      const drawBox = new faceapi.draw.DrawBox(box, { label: text })
+      drawBox.draw(canvas)
+    })
+
   }, 500)
 })
